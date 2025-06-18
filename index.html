@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FaceHeal Skincare</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: black;
+      color: white;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      display: flex;
+      width: 100%;
+      height: 100%;
+    }
+
+    .left-panel, .right-section {
+      width: 50%;
+      padding: 60px;
+    }
+
+    .left-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: black;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      margin-bottom: 60px;
+    }
+
+    .logo-icon {
+      background: white;
+      color: black;
+      font-weight: bold;
+      padding: 8px 10px;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+
+    h1 {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 400;
+      margin-bottom: 40px;
+    }
+
+    .upload-btn {
+      background-color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 16px 32px;
+      color: black;
+      font-size: 18px;
+      cursor: pointer;
+      margin-bottom: 40px;
+    }
+
+    .features label {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .features input {
+      margin-right: 10px;
+    }
+
+    .right-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 0;
+    }
+
+    .right-section img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(100%);
+    }
+
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .modal-content {
+      display: flex;
+      background-color: #111;
+      border-radius: 10px;
+      padding: 20px;
+      width: 80%;
+      max-width: 800px;
+    }
+
+    .modal-left, .modal-right {
+      flex: 1;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-left button {
+      background: white;
+      color: black;
+      padding: 12px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .modal-right img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      border: 2px solid white;
+    }
+
+    .submit-btn {
+      display: none;
+      margin-top: 20px;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 28px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 24px;
+      z-index: 9999;
+    }
+
+    .result-page {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: left;
+      height: 100vh;
+      padding: 40px;
+    }
+
+    .result-box {
+      background-color: #111;
+      border: 2px solid white;
+      border-radius: 15px;
+      padding: 40px;
+      width: 80%;
+      max-width: 700px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    }
+
+    .result-box h2 {
+      margin-bottom: 20px;
+      font-size: 28px;
+      text-align: center;
+    }
+
+    .result-box p {
+      margin: 10px 0;
+      font-size: 18px;
+    }
+
+    .result-box hr {
+      margin: 20px 0;
+      border-color: #333;
+    }
+
+    .result-box button {
+      margin-top: 30px;
+      padding: 12px 24px;
+      background: white;
+      color: black;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Upload Section -->
+<div class="container" id="mainPage">
+  <div class="left-panel">
+    <div class="logo">
+      <span class="logo-icon">FH</span> FaceHeal
+    </div>
+    <h1>SKINCARE</h1>
+    <h2>Concern + Remedy</h2>
+    <button class="upload-btn" onclick="openModal()">Upload Image</button>
+
+    <div class="features">
+      <label><input type="checkbox" checked disabled> Skin Type Detection</label>
+      <label><input type="checkbox" checked disabled> Acne & Wrinkle Detection</label>
+      <label><input type="checkbox" checked disabled> Pigmentation Analysis</label>
+      <label><input type="checkbox" checked disabled> Texture Tone Analysis</label>
+    </div>
+  </div>
+
+  <div class="right-section">
+    <img src="images/image-1.jpg" />
+    <img src="images/image-2.jpg" />
+    <img src="images/image-3.jpg" />
+    <img src="images/image-4.jpg" />
+  </div>
+</div>
+
+<!-- Modal Upload -->
+<div class="modal" id="uploadModal">
+  <div class="close-modal" onclick="closeModal()">&times;</div>
+  <div class="modal-content">
+    <div class="modal-left">
+      <button onclick="document.getElementById('imageInput').click()">Upload from Computer</button>
+      <button onclick="alert('Camera function coming soon')">Click a Picture</button>
+      <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="handleImage(event)" />
+      <button id="submitBtn" class="submit-btn" onclick="submitImage()">Submit</button>
+    </div>
+    <div class="modal-right">
+      <img id="previewModalImage" src="images/image-1.jpg" alt="Preview"/>
+    </div>
+  </div>
+</div>
+
+<!-- Loading -->
+<div class="loading" id="loadingOverlay" style="display:none;">
+  Analyzing your skin...
+</div>
+
+<!-- Results Section -->
+<div class="result-page" id="resultPage">
+  <div class="result-box">
+    <h2>Skin Analysis Result</h2>
+
+    <div id="predictionResults">
+      <!-- JS will populate -->
+    </div>
+
+    <hr>
+
+    <div id="remedyResults">
+      <!-- JS will populate -->
+    </div>
+
+    <button onclick="location.reload()">Back to Upload</button>
+  </div>
+</div>
+
+<script>
+  let selectedImageFile = null;
+
+  function openModal() {
+    document.getElementById('uploadModal').style.display = 'flex';
+  }
+
+  function closeModal() {
+    document.getElementById('uploadModal').style.display = 'none';
+  }
+
+  function handleImage(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    selectedImageFile = file;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById('previewModalImage').src = e.target.result;
+      document.getElementById('submitBtn').style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function submitImage() {
+    if (!selectedImageFile) return alert("Please select an image first!");
+
+    const formData = new FormData();
+    formData.append('file', selectedImageFile);
+
+    document.getElementById('uploadModal').style.display = 'none';
+    document.getElementById('loadingOverlay').style.display = 'flex';
+
+    fetch('http://127.0.0.1:8000/predict/', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => {
+      if (!response.ok) throw new Error("Prediction failed");
+      return response.json();
+    })
+    .then(data => {
+      document.getElementById("mainPage").style.display = "none";
+      document.getElementById("loadingOverlay").style.display = "none";
+      document.getElementById("resultPage").style.display = "flex";
+
+      const preds = data.predictions;
+      const remedies = data.remedies;
+
+      let predHTML = '';
+      for (const [key, value] of Object.entries(preds)) {
+        if (key === 'dark_circles') continue; // Remove dark circles from predictions
+        predHTML += `<p><strong>${key.replace('_', ' ')}:</strong> ${value}</p>`;
+      }
+
+      let remedyHTML = '<h3>Recommended Remedies</h3>';
+      for (const [key, value] of Object.entries(remedies)) {
+        if (key === 'dark_circles') continue; // Remove dark circles from remedies
+        remedyHTML += `<p><strong>${key.replace('_', ' ')}:</strong> ${value}</p>`;
+      }
+
+      document.getElementById("predictionResults").innerHTML = predHTML;
+      document.getElementById("remedyResults").innerHTML = remedyHTML;
+    })
+    .catch(error => {
+      alert("Error: " + error.message);
+      document.getElementById('loadingOverlay').style.display = 'none';
+    });
+  }
+</script>
+
+</body>
+</html>
